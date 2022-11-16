@@ -12,6 +12,7 @@ const deployWallet: DeployFunction = async function (
     hre: HardhatRuntimeEnvironment
 ) {
     const { deployments } = hre;
+    const { deploy } = deployments;
 };
 
 export default deployWallet;
