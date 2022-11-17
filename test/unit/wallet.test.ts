@@ -122,9 +122,21 @@ import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
           describe("contractWithdraw", () => {
               it("should revert if contract balance is less than or equal to zero", async () => {
                   // * we are withdrawing without funding, it should revert.
-                  expect(wallet.withdraw()).to.be.revertedWithCustomError(
+                  expect(
+                      wallet.contractWithdraw()
+                  ).to.be.revertedWithCustomError(
                       wallet,
                       "Wallet__ZeroBalance"
+                  );
+              });
+
+              it("should not revert if withdraw success", async () => {
+                  await wallet.deposit({ value: oneEther });
+                  expect(
+                      wallet.contractWithdraw()
+                  ).not.to.be.revertedWithCustomError(
+                      wallet,
+                      "Wallet__FailedToTransfer"
                   );
               });
           });
