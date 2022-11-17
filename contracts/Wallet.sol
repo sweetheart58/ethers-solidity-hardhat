@@ -127,7 +127,7 @@ contract Wallet is ReentrancyGuard, Ownable {
         @notice contractBalance will return the balance information of a smart contract.
         @return balance of smart contract of type uint256 will be returned.
     */
-    function contractBalance() external view returns (uint256) {
+    function getContractBalance() external view returns (uint256) {
         return address(this).balance;
     }
 }
