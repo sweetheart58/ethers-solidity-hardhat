@@ -19,7 +19,8 @@ const deployWallet: DeployFunction = async function (
         from: deployer,
     });
 
-    console.log(`Wallet contract address: ${wallet.address}`);
+    console.log(`Deploy Script: Wallet contract address: ${wallet.address}`);
 };
 
 export default deployWallet;
+deployWallet.tags = ["all", "wallet"];
