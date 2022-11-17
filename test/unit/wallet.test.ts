@@ -119,5 +119,13 @@ import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
               });
           });
 
-          describe("contractWithdraw", () => {});
+          describe("contractWithdraw", () => {
+              it("should revert if contract balance is less than or equal to zero", async () => {
+                  // * we are withdrawing without funding, it should revert.
+                  expect(wallet.withdraw()).to.be.revertedWithCustomError(
+                      wallet,
+                      "Wallet__ZeroBalance"
+                  );
+              });
+          });
       });
