@@ -27,8 +27,10 @@ import { loadFixture } from "@nomicfoundation/hardhat-network-helpers";
               it("should deposit funds of any user.", async () => {
                   // * get all signers using ethers.
                   const accounts = await ethers.getSigners();
+
                   // * get two accounts from ethers signers and renamed them.
                   const [owner, randomAccount1, randomAccount2] = accounts;
+
                   // * connect each account with contract one by one and deposit funds.
                   await wallet
                       .connect(randomAccount1)
@@ -36,11 +38,24 @@ import { loadFixture } from "@nomicfoundation/hardhat-network-helpers";
                   await wallet
                       .connect(randomAccount2)
                       .deposit({ value: ethers.utils.parseEther("1") });
+
                   // * now we have deposit 2 ethers, the contract should contains 2 ETH, let's test it.
                   const contractBalance = await wallet.getContractBalance();
                   assert(
                       contractBalance.toString() ==
                           ethers.utils.parseEther("2").toString()
+                  );
+
+                  // * check balance of each users.
+                  assert(
+                      (
+                          await wallet.getAddressToFunds(randomAccount1.address)
+                      ).toString() == ethers.utils.parseEther("1").toString()
+                  );
+                  assert(
+                      (
+                          await wallet.getAddressToFunds(randomAccount2.address)
+                      ).toString() == ethers.utils.parseEther("1").toString()
                   );
               });
           });
