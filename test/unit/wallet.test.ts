@@ -68,5 +68,13 @@ import { assert, expect } from "chai";
               });
           });
 
-          describe("withdraw", () => {});
+          describe("withdraw", () => {
+              it("should revert if user's balance is less than or equal to zero", async () => {
+                  // * we are withdrawing without funding, it should revert.
+                  expect(wallet.withdraw()).to.be.revertedWithCustomError(
+                      wallet,
+                      "Wallet__ZeroBalance"
+                  );
+              });
+          });
       });
