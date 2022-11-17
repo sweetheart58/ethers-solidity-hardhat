@@ -2,11 +2,14 @@ import { network, deployments, ethers, getNamedAccounts } from "hardhat";
 import { developmentChains } from "../../helper-hardhat-config";
 import { Wallet, Wallet__factory } from "../../typechain-types";
 import { assert, expect } from "chai";
+import { BigNumber, ContractTransaction } from "ethers";
+import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 
 // * if the newwork will be hardhat or localhost then these tests will be run.
 !developmentChains.includes(network.name)
     ? describe.skip
     : describe("Wallet Unit Tests", () => {
+          const oneEther: BigNumber = ethers.utils.parseEther("1");
           let wallet: Wallet;
           let deployer: string;
 
@@ -34,21 +37,24 @@ import { assert, expect } from "chai";
 
               it("should deposit funds of any user.", async () => {
                   // * get all signers using ethers.
-                  const accounts = await ethers.getSigners();
+                  const accounts: SignerWithAddress[] =
+                      await ethers.getSigners();
 
                   // * get two accounts from ethers signers and renamed them.
+                  // * first amount is by default deployer account so we skip that.
                   const [owner, randomAccount1, randomAccount2] = accounts;
 
                   // * connect each account with contract one by one and deposit funds.
                   await wallet
                       .connect(randomAccount1)
-                      .deposit({ value: ethers.utils.parseEther("1") });
+                      .deposit({ value: oneEther });
                   await wallet
                       .connect(randomAccount2)
-                      .deposit({ value: ethers.utils.parseEther("1") });
+                      .deposit({ value: oneEther });
 
                   // * now we have deposit 2 ethers, the contract should contains 2 ETH, let's test it.
-                  const contractBalance = await wallet.getContractBalance();
+                  const contractBalance: BigNumber =
+                      await wallet.getContractBalance();
                   assert(
                       contractBalance.toString() ==
                           ethers.utils.parseEther("2").toString()
@@ -58,12 +64,12 @@ import { assert, expect } from "chai";
                   assert(
                       (
                           await wallet.getBalance(randomAccount1.address)
-                      ).toString() == ethers.utils.parseEther("1").toString()
+                      ).toString() == oneEther.toString()
                   );
                   assert(
                       (
                           await wallet.getBalance(randomAccount2.address)
-                      ).toString() == ethers.utils.parseEther("1").toString()
+                      ).toString() == oneEther.toString()
                   );
               });
           });
@@ -75,6 +81,33 @@ import { assert, expect } from "chai";
                       wallet,
                       "Wallet__ZeroBalance"
                   );
+              });
+
+              it("should allow user to withdraw", async () => {
+                  // * before withdraw, should add funds for user.
+                  // * first amount is by default deployer account so we skip that.
+                  const [owner, randomAccount1] = await ethers.getSigners();
+
+                  const otherUserWalletInstance: Wallet =
+                      wallet.connect(randomAccount1);
+
+                  // * deposit 1 ether
+                  await otherUserWalletInstance.deposit({ value: oneEther });
+                  // * check is it deposited?
+                  const balance = await wallet.getBalance(
+                      randomAccount1.address
+                  );
+                  assert(balance.toString() == oneEther.toString());
+
+                  // * now check withdraw.
+                  const tx: ContractTransaction =
+                      await otherUserWalletInstance.withdraw();
+                  await tx.wait(1);
+
+                  const updatedBalance = await wallet.getBalance(
+                      randomAccount1.address
+                  );
+                  assert(updatedBalance.toString() == "0");
               });
           });
       });
