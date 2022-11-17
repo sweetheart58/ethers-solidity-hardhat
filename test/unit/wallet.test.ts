@@ -49,12 +49,12 @@ import { loadFixture } from "@nomicfoundation/hardhat-network-helpers";
                   // * check balance of each users.
                   assert(
                       (
-                          await wallet.getAddressToFunds(randomAccount1.address)
+                          await wallet.getBalance(randomAccount1.address)
                       ).toString() == ethers.utils.parseEther("1").toString()
                   );
                   assert(
                       (
-                          await wallet.getAddressToFunds(randomAccount2.address)
+                          await wallet.getBalance(randomAccount2.address)
                       ).toString() == ethers.utils.parseEther("1").toString()
                   );
               });

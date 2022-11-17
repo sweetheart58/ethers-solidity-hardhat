@@ -130,12 +130,4 @@ contract Wallet is ReentrancyGuard, Ownable {
     function getContractBalance() external view returns (uint256) {
         return address(this).balance;
     }
-
-    function getAddressToFunds(address userAddress)
-        external
-        view
-        returns (uint256)
-    {
-        return s_addressToFunds[userAddress];
-    }
 }
