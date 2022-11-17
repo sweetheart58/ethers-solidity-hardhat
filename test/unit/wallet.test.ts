@@ -94,7 +94,7 @@ import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
                   // * deposit 1 ether
                   await otherUserWalletInstance.deposit({ value: oneEther });
                   // * check is it deposited?
-                  const balance = await wallet.getBalance(
+                  const balance: BigNumber = await wallet.getBalance(
                       randomAccount1.address
                   );
                   assert(balance.toString() == oneEther.toString());
@@ -104,10 +104,18 @@ import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
                       await otherUserWalletInstance.withdraw();
                   await tx.wait(1);
 
-                  const updatedBalance = await wallet.getBalance(
+                  const updatedBalance: BigNumber = await wallet.getBalance(
                       randomAccount1.address
                   );
                   assert(updatedBalance.toString() == "0");
+              });
+
+              it("should not revert if withdraw success", async () => {
+                  await wallet.deposit({ value: oneEther });
+                  expect(wallet.withdraw()).not.to.be.revertedWithCustomError(
+                      wallet,
+                      "Wallet__FailedToTransfer"
+                  );
               });
           });
       });
