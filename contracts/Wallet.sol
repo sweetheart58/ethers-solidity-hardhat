@@ -9,6 +9,7 @@ import "hardhat/console.sol";
 // * custom erros
 error Wallet__FailedToTransfer();
 error Wallet__ZeroBalance();
+error Wallet__ValueShouldBeGreaterThanZero();
 
 /**
     @title Wallet Smart Contract
@@ -31,6 +32,10 @@ contract Wallet is ReentrancyGuard, Ownable {
         @notice using deposit function any users can store their funds to their allocated mapping location.
     */
     function deposit() external payable {
+        if (msg.value <= 0) {
+            revert Wallet__ValueShouldBeGreaterThanZero();
+        }
+
         s_addressToFunds[msg.sender] += msg.value;
     }
 
