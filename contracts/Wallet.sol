@@ -95,24 +95,6 @@ contract Wallet is ReentrancyGuard, Ownable {
     // [0xAb8483F64d9C6d1EcF9b849Ae677dD3315835cb2,0x4B20993Bc481177ec7E8f571ceCaE8A9e22C02db]
     // [2000000000000000000,2000000000000000000]
 
-    /**
-        @notice contractWithdraw will be use to withdraw accidentally store funds on a smart contract to owner address.
-        @dev This function is using nonReentrant from Openzeppelin's ReentrancyGuard smart contract. This will lock our function until it will not complete.
-        @dev This function is using onlyOwner from Openzeppelin's Ownable smart contract. This will only allow owner to call this function.
-    */
-    function contractWithdraw() external nonReentrant onlyOwner {
-        uint256 balance = address(this).balance;
-
-        if (balance <= 0) {
-            revert Wallet__ZeroBalance();
-        }
-
-        (bool success, ) = payable(msg.sender).call{value: balance}("");
-        if (!success) {
-            revert Wallet__FailedToTransfer();
-        }
-    }
-
     // * view function
 
     /**
