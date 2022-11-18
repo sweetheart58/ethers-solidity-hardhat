@@ -119,5 +119,24 @@ import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
               });
           });
 
-          describe("transfer", () => {});
+          describe("transfer", () => {
+              it("should tranfer funds to single address", async () => {
+                  const [owner, randomAccount1, randomAccount2] =
+                      await ethers.getSigners();
+
+                  const randomAccount1WalletInstance =
+                      wallet.connect(randomAccount1);
+
+                  await expect(
+                      randomAccount1WalletInstance.transfer(
+                          [randomAccount2.address],
+                          [oneEther],
+                          { value: oneEther }
+                      )
+                  ).to.changeEtherBalances(
+                      [randomAccount1, randomAccount2],
+                      [(-oneEther).toString(), (+oneEther).toString()]
+                  );
+              });
+          });
       });
