@@ -72,6 +72,10 @@ contract Wallet is ReentrancyGuard, Ownable {
         payable
         nonReentrant
     {
+        if (msg.value <= 0) {
+            revert Wallet__ValueShouldBeGreaterThanZero();
+        }
+
         for (uint16 i = 0; i < receivers.length; i++) {
             address receiver = receivers[i];
             uint256 amount = amounts[i];
