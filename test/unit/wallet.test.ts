@@ -120,6 +120,19 @@ import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
           });
 
           describe("transfer", () => {
+              it("should revert if value is less than or equal to zero", async () => {
+                  const [owner, randomAccount1] = await ethers.getSigners();
+
+                  expect(
+                      wallet.transfer([randomAccount1.address], [oneEther], {
+                          value: ethers.utils.parseEther("0"),
+                      })
+                  ).to.be.revertedWithCustomError(
+                      wallet,
+                      "Wallet__ValueShouldBeGreaterThanZero"
+                  );
+              });
+
               it("should tranfer funds to single address", async () => {
                   const [owner, randomAccount1, randomAccount2] =
                       await ethers.getSigners();
