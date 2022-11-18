@@ -129,8 +129,11 @@ import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 
                   await expect(
                       randomAccount1WalletInstance.transfer(
+                          // * array of address to tranfer funds.
                           [randomAccount2.address],
+                          // * amount for each address in order.
                           [oneEther],
+                          // * sum of total amount should be pass here.
                           { value: oneEther }
                       )
                   ).to.changeEtherBalances(
