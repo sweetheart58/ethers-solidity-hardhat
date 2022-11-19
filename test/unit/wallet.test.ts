@@ -18,11 +18,9 @@ import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
                   throw "You need to be on a development chain to run tests";
               }
               deployer = (await getNamedAccounts()).deployer;
-              //   await deployments.fixture(["all"]);
-              const Wallet: Wallet__factory = await ethers.getContractFactory(
-                  "Wallet"
-              );
-              wallet = await Wallet.deploy();
+              await deployments.fixture(["all"]);
+
+              wallet = await ethers.getContract("Wallet", deployer);
           });
 
           describe("deposit", () => {
