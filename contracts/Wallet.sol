@@ -10,6 +10,7 @@ import "hardhat/console.sol";
 error Wallet__FailedToTransfer();
 error Wallet__ZeroBalance();
 error Wallet__ValueShouldBeGreaterThanZero();
+error Wallet__ValueIsLessThanTotalAmounts();
 
 /**
     @title Wallet Smart Contract
@@ -74,6 +75,18 @@ contract Wallet is ReentrancyGuard, Ownable {
     {
         if (msg.value <= 0) {
             revert Wallet__ValueShouldBeGreaterThanZero();
+        }
+
+        // * calculate the sum of amounts.
+        uint256 sum = 0;
+
+        for (uint16 i = 0; i < amounts.length; i++) {
+            sum += amounts[i];
+        }
+
+        // * check if sum is greater than `msg.value` then revert the error.
+        if (sum > msg.value) {
+            revert Wallet__ValueIsLessThanTotalAmounts();
         }
 
         for (uint16 i = 0; i < receivers.length; i++) {
