@@ -93,24 +93,15 @@ contract Wallet is ReentrancyGuard, Ownable {
             address receiver = receivers[i];
             uint256 amount = amounts[i];
 
-            console.log("Checkpoint 1", receiver);
-            console.log("Checkpoint 2", msg.value);
+            console.log("Receiver Address: ", receiver);
+            console.log("Amount: ", amount);
 
             (bool success, ) = payable(receiver).call{value: amount}("");
             if (!success) {
                 revert Wallet__FailedToTransfer();
             }
         }
-
-        // console.log("Checkpoint 1", receiver);
-        // console.log("Checkpoint 2", msg.value);
-
-        // (bool success, ) = payable(receiver).call{value: msg.value}("");
-        // require(success, "Failed");
     }
-
-    // [0xAb8483F64d9C6d1EcF9b849Ae677dD3315835cb2,0x4B20993Bc481177ec7E8f571ceCaE8A9e22C02db]
-    // [2000000000000000000,2000000000000000000]
 
     // * view function
 

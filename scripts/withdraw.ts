@@ -16,7 +16,7 @@ const withdrawFunction: () => Promise<void> = async () => {
     const wallet: Wallet = await ethers.getContract("Wallet", deployer);
     console.log(`Wallet deployed at: ${wallet.address}`);
 
-    // * need to deposit before with on hardhat network.
+    // * need to deposit first on hardhat network.
     if (network.name == "hardhat") {
         const tx: ContractTransaction = await wallet.deposit({
             value: oneEther,
