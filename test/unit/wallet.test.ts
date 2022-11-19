@@ -123,7 +123,7 @@ import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
               it("should revert if value is less than or equal to zero", async () => {
                   const [owner, randomAccount1] = await ethers.getSigners();
 
-                  expect(
+                  await expect(
                       wallet.transfer([randomAccount1.address], [oneEther], {
                           value: ethers.utils.parseEther("0"),
                       })
@@ -133,11 +133,28 @@ import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
                   );
               });
 
+              it("should revert if value is less than sum of amounts", async () => {
+                  const [owner, randomAccount1, randomAccount2] =
+                      await ethers.getSigners();
+
+                  // * here we are tranfering 2 ethers 1 to each address but only sending 1 ether as a `msg.value`, it should revert.
+                  await expect(
+                      wallet.transfer(
+                          [randomAccount1.address, randomAccount2.address],
+                          [oneEther, oneEther],
+                          { value: oneEther }
+                      )
+                  ).to.be.revertedWithCustomError(
+                      wallet,
+                      "Wallet__ValueIsLessThanTotalAmounts"
+                  );
+              });
+
               it("should tranfer funds to single address", async () => {
                   const [owner, randomAccount1, randomAccount2] =
                       await ethers.getSigners();
 
-                  const randomAccount1WalletInstance =
+                  const randomAccount1WalletInstance: Wallet =
                       wallet.connect(randomAccount1);
 
                   await expect(
