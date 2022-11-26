@@ -20,12 +20,18 @@ error Wallet__ValueIsLessThanTotalAmounts();
     @custom:portfolio This is a portfolio smart contract.
 */
 contract Wallet is ReentrancyGuard, Ownable {
-    // STATIC VARIABLES
+    // * STATIC VARIABLES
 
     // * mappings
     mapping(address => uint256) private s_addressToFunds;
 
     // * FUNCTIONS
+
+    // * receive function
+    receive() external payable {}
+
+    // * fallback function
+    fallback() external payable {}
 
     // * external functions
 
@@ -68,11 +74,10 @@ contract Wallet is ReentrancyGuard, Ownable {
         @param receivers will be an array of addresses.
         @param amounts will be an array of amounts.
     */
-    function transfer(address[] memory receivers, uint256[] memory amounts)
-        external
-        payable
-        nonReentrant
-    {
+    function transfer(
+        address[] memory receivers,
+        uint256[] memory amounts
+    ) external payable nonReentrant {
         if (msg.value <= 0) {
             revert Wallet__ValueShouldBeGreaterThanZero();
         }
@@ -110,11 +115,9 @@ contract Wallet is ReentrancyGuard, Ownable {
         @param accountAddress of the user.
         @return balance of user of type uint256 will be returned.
     */
-    function getBalance(address accountAddress)
-        external
-        view
-        returns (uint256)
-    {
+    function getBalance(
+        address accountAddress
+    ) external view returns (uint256) {
         return s_addressToFunds[accountAddress];
     }
 
