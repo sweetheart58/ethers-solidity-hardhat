@@ -4,7 +4,6 @@ pragma solidity ^0.8.16;
 // * imports
 import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
-import "hardhat/console.sol";
 
 // * custom erros
 error Wallet__FailedToTransfer();
@@ -97,9 +96,6 @@ contract Wallet is ReentrancyGuard, Ownable {
         for (uint16 i = 0; i < receivers.length; i++) {
             address receiver = receivers[i];
             uint256 amount = amounts[i];
-
-            console.log("Receiver Address: ", receiver);
-            console.log("Amount: ", amount);
 
             (bool success, ) = payable(receiver).call{value: amount}("");
             if (!success) {
