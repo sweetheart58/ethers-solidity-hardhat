@@ -49,6 +49,19 @@ contract Wallet is ReentrancyGuard, Ownable {
         uint256 indexed value,
         uint256 indexed timestamp
     );
+    /**
+     * @notice Emit the information about sender, receivers, amounts and the timestamp when the transfer event will trigger.
+     * @param from is the address of user tranfering funds.
+     * @param to is the array of addressess of users who will receive funds.
+     * @param timestamp is the time when this event will trigger.
+     * @param amounts is the  the array of amounts according the order of addresses which receivers will receive.
+     */
+    event Transfer(
+        address indexed from,
+        address[] indexed to,
+        uint256 indexed timestamp,
+        uint256[] amounts
+    );
 
     // * FUNCTIONS
 
@@ -130,6 +143,7 @@ contract Wallet is ReentrancyGuard, Ownable {
                 revert Wallet__FailedToTransfer();
             }
         }
+        emit Transfer(msg.sender, receivers, block.timestamp, amounts);
     }
 
     // * view function
