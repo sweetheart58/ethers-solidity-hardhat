@@ -25,7 +25,11 @@ contract Wallet is ReentrancyGuard, Ownable {
     mapping(address => uint256) private s_addressToFunds;
 
     // * EVENTS
-
+    /**
+     * @notice Emit the information about sender and the amount it deposited on deposit function call.
+     * @param sender is the address of the caller of deposit function.
+     * @param value is the uint256 type amount that sender will deposit.
+     */
     event Deposit(address indexed sender, uint256 indexed value);
 
     // * FUNCTIONS
