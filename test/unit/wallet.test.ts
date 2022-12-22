@@ -159,7 +159,7 @@ import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
                   );
               });
 
-              it("should tranfer funds to single address", async () => {
+              it("should tranfer funds to single address.", async () => {
                   const [owner, randomAccount1, randomAccount2] =
                       await ethers.getSigners();
 
@@ -179,6 +179,25 @@ import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
                       [randomAccount1, randomAccount2],
                       [(-oneEther).toString(), (+oneEther).toString()]
                   );
+              });
+
+              it("should emit a `Transfer` event.", async () => {
+                  const [owner, randomAccount1, randomAccount2] =
+                      await ethers.getSigners();
+
+                  const randomAccount1WalletInstance: Wallet =
+                      wallet.connect(randomAccount1);
+
+                  await expect(
+                      randomAccount1WalletInstance.transfer(
+                          // * array of address to tranfer funds.
+                          [randomAccount2.address],
+                          // * amount for each address in order.
+                          [oneEther],
+                          // * sum of total amount should be pass here.
+                          { value: oneEther }
+                      )
+                  ).to.emit(wallet, "Transfer");
               });
           });
       });
