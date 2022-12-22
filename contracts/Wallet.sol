@@ -36,6 +36,17 @@ contract Wallet is ReentrancyGuard, Ownable {
         uint256 indexed value,
         uint256 indexed timestamp
     );
+    /**
+     * @notice Emit the information about the caller, amount and timestamp when this event will trigger.
+     * @param caller is the address of the user who will call the withdraw function.
+     * @param value is the amount that will be withdrawn from user balance.
+     * @param timestamp is the time when this event will trigger.
+     */
+    event Withdraw(
+        address indexed caller,
+        uint256 indexed value,
+        uint256 indexed timestamp
+    );
 
     // * FUNCTIONS
 
@@ -76,6 +87,7 @@ contract Wallet is ReentrancyGuard, Ownable {
         if (!success) {
             revert Wallet__FailedToTransfer();
         }
+        emit Withdraw(msg.sender, amount, block.timestamp);
     }
 
     /**
