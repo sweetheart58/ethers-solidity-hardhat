@@ -121,6 +121,11 @@ import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
                       "Wallet__FailedToTransfer"
                   );
               });
+
+              it("should emit `Withdraw` event", async () => {
+                  await wallet.deposit({ value: oneEther });
+                  await expect(wallet.withdraw()).to.emit(wallet, "Withdraw");
+              });
           });
 
           describe("transfer", () => {
