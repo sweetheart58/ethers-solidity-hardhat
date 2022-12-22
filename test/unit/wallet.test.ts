@@ -70,6 +70,12 @@ import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
                       ).toString() == oneEther.toString()
                   );
               });
+
+              it("should emit `Deposit` event", async () => {
+                  await expect(
+                      wallet.deposit({ value: ethers.utils.parseEther("1") })
+                  ).to.emit(wallet, "Deposit");
+              });
           });
 
           describe("withdraw", () => {
