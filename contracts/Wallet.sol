@@ -24,6 +24,10 @@ contract Wallet is ReentrancyGuard, Ownable {
     // * mappings
     mapping(address => uint256) private s_addressToFunds;
 
+    // * EVENTS
+
+    event Deposit(address indexed sender, uint256 indexed value);
+
     // * FUNCTIONS
 
     // * receive function
@@ -43,6 +47,7 @@ contract Wallet is ReentrancyGuard, Ownable {
         }
 
         s_addressToFunds[msg.sender] += msg.value;
+        emit Deposit(msg.sender, msg.value);
     }
 
     /**
