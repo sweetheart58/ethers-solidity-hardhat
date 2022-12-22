@@ -28,13 +28,15 @@ contract Wallet is ReentrancyGuard, Ownable {
     /**
      * @notice Emit the information about sender and the amount it deposited on deposit function call.
      * @param sender is the address of the caller of deposit function.
-     * @param value is the uint256 type amount that sender will deposit.
+     * @param receiver is the address of the contract which will receive the user funds.
      * @param timestamp is the time when the event will trigger.
+     * @param value is the uint256 type amount that sender will deposit.
      */
     event Deposit(
         address indexed sender,
-        uint256 indexed value,
-        uint256 indexed timestamp
+        address indexed receiver,
+        uint256 indexed timestamp,
+        uint256 value
     );
     /**
      * @notice Emit the information about the caller, amount and timestamp when this event will trigger.
@@ -67,7 +69,7 @@ contract Wallet is ReentrancyGuard, Ownable {
         }
 
         s_addressToFunds[msg.sender] += msg.value;
-        emit Deposit(msg.sender, msg.value, block.timestamp);
+        emit Deposit(msg.sender, address(this), msg.value, block.timestamp);
     }
 
     /**
