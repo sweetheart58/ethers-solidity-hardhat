@@ -4,7 +4,7 @@ import { Wallet } from "../typechain-types";
 
 const depositFunction: () => Promise<void> = async () => {
     const { deployer } = await getNamedAccounts();
-    const oneEther: BigNumber = ethers.utils.parseEther("1");
+    const oneEther: BigNumber = ethers.utils.parseEther("0.01");
 
     if (network.name == "hardhat") {
         console.log("Running Script on Hardhat Network");
