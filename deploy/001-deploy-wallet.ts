@@ -2,6 +2,7 @@ import { HardhatRuntimeEnvironment } from "hardhat/types";
 import { DeployFunction } from "hardhat-deploy/types";
 import { developmentChains } from "../helper-hardhat-config";
 import { network } from "hardhat";
+import verify from "../utils/verify";
 
 /**
  * * Important Notes
@@ -20,10 +21,21 @@ const deployWallet: DeployFunction = async function (
     const wallet = await deploy("Wallet", {
         from: deployer,
         log: true,
+        args: [],
         waitConfirmations: developmentChains.includes(network.name) ? 1 : 6,
     });
 
     console.log(`Deploy Script: Wallet contract address: ${wallet.address}`);
+
+    // * only verify on testnets or mainnets.
+    if (
+        !developmentChains.includes(network.name) &&
+        process.env.ETHERSCAN_API_KEY
+    ) {
+        console.log(`Verifing...`);
+        await verify(wallet.address, []);
+        console.log(`Verified!`);
+    }
 };
 
 export default deployWallet;

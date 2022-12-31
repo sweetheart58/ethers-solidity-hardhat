@@ -15,7 +15,6 @@ error Wallet__ValueIsLessThanTotalAmounts();
     @title Wallet Smart Contract
     @author Ali Murtaza Memon
     @notice This smart contract works as a bank, users can deposit, withdrawn and transfer funds to other addresses.
-    @dev This contract has an extra function contractWithdraw that only owner can use to withdrawn funds that accidentally store inside contract.
     @custom:portfolio This is a portfolio smart contract.
 */
 contract Wallet is ReentrancyGuard, Ownable {
