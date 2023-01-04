@@ -1,13 +1,11 @@
-# Sample Hardhat Project
+# Ethers Wallet DApp
 
-This project demonstrates a basic Hardhat use case. It comes with a sample contract, a test for that contract, and a script that deploys that contract.
+## Tech Stack:
 
-Try running some of the following tasks:
+1. Solidity
+2. Hardhat
+3. TheGraph
+4. React
+5. Tailwind
 
-```shell
-npx hardhat help
-npx hardhat test
-REPORT_GAS=true npx hardhat test
-npx hardhat node
-npx hardhat run scripts/deploy.ts
-```
+### Website link: [Ethers Wallet](https://ethers-wallet-frontend-react-tailwind.vercel.app/)
