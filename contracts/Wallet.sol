@@ -81,7 +81,7 @@ contract Wallet is ReentrancyGuard, Ownable {
         }
 
         s_addressToFunds[msg.sender] += msg.value;
-        emit Deposit(msg.sender, address(this), msg.value, block.timestamp);
+        emit Deposit(msg.sender, address(this), block.timestamp, msg.value);
     }
 
     /**
